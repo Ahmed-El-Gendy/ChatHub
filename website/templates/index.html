@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div><h1>Home Page</h1>
+        {% for x in range(10) %}
+        {% if x % 2 == 0 %}
+            <p>{{ x }}</p>
+            {% endif %}
+        {% endfor %}
+
+    {% for x in ch %}
+    <p>{{ x }}</p>
+    {% endfor %}
+    <p>Hello, {{ name }}</p>
+    </div>
+<script
+        type="text/javascript"
+        src="{{ url_for('static',  filename='index.js')}}"
+></script>
+</body>
+</html>
