@@ -75,6 +75,11 @@
   color: white;
 }
 
+.head {
+  margin-top: 20px;
+  color: greenyellow;
+}
+
 .signup a {
   color: #5cb85c;
   text-decoration: none;
