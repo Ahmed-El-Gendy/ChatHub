@@ -1,26 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="sign.css">
+  <meta charset="utf-8">
+  <title>sign up</title>
+  <link rel="stylesheet" href="sign.css">
 </head>
 <body>
-    <div class="signup-container">
-        <h2>Sign Up</h2>
-        <form action="/signup" method="post">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-            
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-            
-            <button type="submit">Sign Up</button>
-        </form>
-    </div>
+  <div class="img"></div>
+  <div class="content">
+    <div class="headsign"><h2>Sign Up</h2>
+    <form action="#">
+      <div class="field">
+        <input type="text" required placeholder="Email Address">
+      </div>
+
+      <div class="field">
+        <input type="text" required placeholder="First Name">
+      </div>
+
+      <div class="field">
+        <input type="text" required placeholder="Last Name">
+      </div>
+
+      <div class="field space">
+        <input type="password" class="pass-key" required placeholder="Password">
+        <span class="show">Show</span>
+      </div>
+
+      <div class="field space">
+        <input type="password (Confirm)" class="pass-key" required placeholder="password (Confirm)">
+        <span class="show">Show</span>
+      </div>
+
+      <div class="field1">
+        <input type="submit" value="Sign">
+      </div>
+    </form>
+  </div>
 </body>
 </html>
