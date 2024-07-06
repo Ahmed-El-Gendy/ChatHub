@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="profile">
+            <h2>Saged Ryan</h2>
+            <img src="saged.jpg" alt="Saged Ryan Profile" class="profile-img">
+        </div>
+        <div class="users-list">
+            <h3>Contacts</h3>
+            <ul>
+                <li onclick="openChat('Ramy Rashad', 'ramy.jpg')">
+                    <img src="ramy.jpg" alt="Ramy Rashad" class="user-img">
+                    Ramy Rashad
+                </li>
+                <li onclick="openChat('Ahmed Elgendy', 'gendy.jpg')">
+                    <img src="gendy.jpg" alt="Ahmed Elgendy" class="user-img">
+                    Ahmed Elgendy
+                </li>
+                <li onclick="openChat('Abdelrahman Atef', 'atef.jpg')">
+                    <img src="atef.jpg" alt="Abdelrahman Atef" class="user-img">
+                    Abdelrahman Atef
+                </li>
+                <li onclick="openChat('Youssef Khaled', 'youssef.jpg')">
+                    <img src="youssef.jpg" alt="Youssef Khaled" class="user-img">
+                    Youssef Khaled
+                </li>
+                <li onclick="openChat('Ziad Hany', 'ziad.jpg')">
+                    <img src="ziad.jpg" alt="Ziad Hany" class="user-img">
+                    Ziad Hany
+                </li>
+            </ul>
+        </div>
+        <div class="chat-window">
+            <div class="messages" id="messages">
+                <h3>Select a user to start chatting</h3>
+            </div>
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="Type a message">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+    <script src="chat.js"></script>
+</body>
+</html>
