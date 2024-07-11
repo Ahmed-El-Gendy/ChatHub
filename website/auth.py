@@ -1,9 +1,13 @@
 import flask
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, jsonify, send_file
 from flask_login import login_user, logout_user, login_required, current_user
 from . import db
-from .models import User
+from .models import User, Message
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+import os
+import io
+from io import BytesIO
 
 auth = Blueprint('auth', __name__)
 
@@ -18,7 +22,7 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
-                return redirect(url_for('views.home'))
+                return redirect(url_for('views.index'))
             else:
                 flash('Invalid', category='error')
         else:
@@ -34,6 +38,11 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -42,6 +51,8 @@ def signup():
         email = request.form['email']
         first_name = request.form['firstname']
         last_name = request.form['lastname']
+        profile_image = request.files['profile_image']
+
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Email already used', category='error')
@@ -58,9 +69,82 @@ def signup():
                             password=generate_password_hash(password1, method='pbkdf2:sha256'))
             db.session.add(new_user)
             db.session.commit()
+
+            if profile_image and allowed_file(profile_image.filename):
+                filename = f"{new_user.id}"
+                image_data = profile_image.read()
+                new_user.image_filename = filename
+                new_user.image_data = image_data
+                db.session.commit()
+
             flash('Account created', category='success')
             login_user(new_user, remember=True)
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.index'))
 
     return render_template("signup.html", user=current_user)
+
+
+@auth.route('/api/chats', methods=['POST'])
+def send_message():
+    data = request.json
+    receiver_id = data.get('receiver_id')
+    message_text = data.get('message')
+
+    if receiver_id and message_text:
+        new_message = Message(sender_id=current_user.id, receiver_id=receiver_id, content=message_text)
+        db.session.add(new_message)
+        db.session.commit()
+
+        return jsonify({
+            'success': True,
+            'message': {
+                'sender_id': current_user.id,
+                'receiver_id': receiver_id,
+                'content': message_text,
+                'timestamp': new_message.timestamp
+            }
+        }), 200
+    else:
+        return jsonify({'error': 'Invalid data'}), 400
+
+
+@auth.route('/api/chats/<int:user_id>', methods=['GET'])
+def get_chats(user_id):
+    messages = Message.query.filter(
+        ((Message.sender_id == current_user.id) & (Message.receiver_id == user_id)) |
+        ((Message.sender_id == user_id) & (Message.receiver_id == current_user.id))
+    ).order_by(Message.timestamp).all()
+
+    # Format messages to send as JSON
+    formatted_messages = [{
+        'sender_id': message.sender_id,
+        'receiver_id': message.receiver_id,
+        'content': message.content,
+        'timestamp': message.timestamp
+    } for message in messages]
+
+    return jsonify(formatted_messages), 200
+
+
+@auth.route('/api/user_images', methods=['GET'])
+def get_user_images():
+    users = User.query.all()
+    user_images = {user.first_name: user.image_data.decode('utf-8') if user.image_data else None for user in users}
+    return jsonify(user_images)
+
+
+@auth.route('/user_images/<int:user_id>')
+def user_image(user_id):
+    user = User.query.get(user_id)
+    if user and user.image_data:
+        return send_file(
+            BytesIO(user.image_data),
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name=user.image_filename
+        )
+    return redirect(url_for('static', filename='saged.jpg'))
+
+
+
 
