@@ -17,8 +17,13 @@ fetch('/api/user_images')
 
         // After fetching user images, fetch chats for each user
         Object.keys(userImages).forEach(userId => {
-            fetchChats(userId);  // Update to pass userId instead of userImages[user]
+            fetchChats(userId);  // Fetch initially
         });
+        setInterval(() => {
+            if (currentUserId) {
+                fetchChats(currentUserId);
+            }
+        }, 1000);  // Fetch every second
     })
     .catch(error => console.error('Error fetching user images:', error));
 
@@ -28,8 +33,24 @@ function fetchChats(userId) {
         .then(response => response.json())
         .then(data => {
             chats[userId] = data;  // Store messages in chats object
+            if (userId === currentUserId) {
+                updateChatDisplay();  // Update the display if it's the current user's chat
+            }
         })
         .catch(error => console.error(`Error fetching chats for user ${userId}:`, error));
+}
+
+function updateChatDisplay() {
+    const messagesContainer = document.getElementById('messages');
+    messagesContainer.innerHTML = '';
+
+    if (chats[currentUserId]) {
+        chats[currentUserId].forEach(chat => {
+            const sender = chat.sender_id === currentUserId ? currentUser : 'Me';
+            const senderImage = userImages[sender];
+            appendMessage(chat.message, sender, senderImage);
+        });
+    }
 }
 
 // Request notification permission
@@ -40,31 +61,9 @@ Notification.requestPermission().then(function(result) {
 function openChat(user, userId) {
     currentUser = user;
     currentUserId = userId;
-    const messagesContainer = document.getElementById('messages');
-    messagesContainer.innerHTML = '';
-
-    // Display stored messages if available
-    if (chats[currentUserId]) {
-        chats[currentUserId].forEach(chat => {
-            const sender = chat.sender_id === currentUserId ? currentUser : 'Me';
-            const senderImage = userImages[sender];
-            appendMessage(chat.message, sender, senderImage);
-        });
-    } else {
-        // Fetch messages for the selected user from the backend if not already stored
-        fetch(`/api/chats/${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                chats[currentUserId] = data;
-                data.forEach(chat => {
-                    const sender = chat.sender_id === currentUserId ? currentUser : 'Me';
-                    const senderImage = userImages[sender];
-                    appendMessage(chat.message, sender, senderImage);
-                });
-            })
-            .catch(error => console.error(`Error fetching chats for user ${userId}:`, error));
-    }
+    updateChatDisplay();
 }
+
 
 function sendMessage() {
     const messageInput = document.getElementById('messageInput');

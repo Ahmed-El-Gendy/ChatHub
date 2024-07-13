@@ -3,10 +3,14 @@ body {
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-container {
     display: flex;
+    flex: 1;
     height: 100vh;
 }
 
@@ -15,6 +19,7 @@ body {
     color: white;
     padding: 20px;
     text-align: center;
+    flex: 0 0 200px;
 }
 
 .profile-img {
@@ -35,6 +40,8 @@ body {
     background-color: #8b9dc3;
     padding: 20px;
     width: 200px;
+    flex: 0 0 200px;
+    overflow: auto;
 }
 
 .users-list ul {
@@ -58,7 +65,7 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #000;
-    color: #00ff00;
+    color: #000000;
 }
 
 .messages {
