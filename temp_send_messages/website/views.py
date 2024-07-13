@@ -48,9 +48,8 @@ views = Blueprint('views', __name__)
 @login_required
 def index():
     users = User.query.all()
-    user_data = {user.id: {'first_name': user.first_name, 'last_name': user.last_name, 'image_filename': user.image_filename} for user in users}
-    return render_template('home.html', user=current_user, user_data=user_data)
-
+    user_images = {user.id: user.image_filename for user in users}
+    return render_template('home.html', user=current_user, user_images=user_images)
 
 
 @views.route('/api/user_images', methods=['GET'])

@@ -13,17 +13,17 @@
 <body>
     <div class="chat-container">
         <div class="profile">
-            <h2><p>{{ user.first_name }} {{ user.last_name }}</p></h2>
+            <h2><p>{{ user.first_name }} {{ user.last_name }} {{ user.id }}</p></h2>
             <img src="{{ url_for('views.user_image', user_id=user.id) }}" alt="{{ user.first_name }} {{ user.last_name }} Profile" class="profile-img">
         </div>
         <div class="users-list">
             <h3>Contacts</h3>
             <ul>
-                {% for user_id, data in user_data.items() %}
+                {% for user_id, image_filename in user_images.items() %}
                     {% if user_id != user.id %}
                         <li onclick="openChat('{{ user_id }}', {{ user_id }})">
-                            <img src="{{ url_for('views.user_image', user_id=user_id) }}" alt="{{ data.first_name }} {{ data.last_name }} Profile" class="user-img">
-                            {{ data.first_name }} {{ data.last_name }}
+                            <img src="{{ url_for('views.user_image', user_id=user_id) }}" alt="User Image" class="user-img">
+                            User ID: {{ user_id }}
                         </li>
                     {% endif %}
                 {% endfor %}
