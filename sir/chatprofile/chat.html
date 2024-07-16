@@ -116,23 +116,6 @@
     #confirmationModal .modal-content button:hover {
       background-color: #c82333;
     }
-
-    /* Delete Chat Confirmation Modal */
-    #deleteChatModal .modal-content {
-      max-width: 300px; /* Adjust width for delete chat confirmation */
-    }
-
-    #deleteChatModal .modal-content p {
-      margin-bottom: 20px;
-    }
-
-    #deleteChatModal .modal-content button {
-      background-color: #dc3545;
-    }
-
-    #deleteChatModal .modal-content button:hover {
-      background-color: #c82333;
-    }
   </style>
 </head>
 <body>
@@ -208,26 +191,27 @@
       <span class="close" onclick="closeFriendsList()">&times;</span>
       <h2>Friends List</h2>
       <ul id="friendsList">
-        <li onclick="openChat('Ramy Rashad', 'ramy.jpg')">
+        <li onclick="confirmBlock('Ramy Rashad')">
           <img src="ramy.jpg" alt="Ramy Rashad" class="user-img">
           <span>Ramy Rashad</span>
         </li>
-        <li onclick="openChat('Ahmed Elgendy', 'gendy.jpg')">
+        <li onclick="confirmBlock('Ahmed Elgendy')">
           <img src="gendy.jpg" alt="Ahmed Elgendy" class="user-img">
           <span>Ahmed Elgendy</span>
         </li>
-        <li onclick="openChat('Abdelrahman Atef', 'atef.jpg')">
+        <li onclick="confirmBlock('Abdelrahman Atef')">
           <img src="atef.jpg" alt="Abdelrahman Atef" class="user-img">
           <span>Abdelrahman Atef</span>
         </li>
-        <li onclick="openChat('Youssef Khaled', 'youssef.jpg')">
+        <li onclick="confirmBlock('Youssef Khaled')">
           <img src="youssef.jpg" alt="Youssef Khaled" class="user-img">
           <span>Youssef Khaled</span>
         </li>
-        <li onclick="openChat('Ziad Hany', 'ziad.jpg')">
+        <li onclick="confirmBlock('Ziad Hany')">
           <img src="ziad.jpg" alt="Ziad Hany" class="user-img">
           <span>Ziad Hany</span>
         </li>
+        <!-- Repeat li items as needed -->
       </ul>
     </div>
   </div>
@@ -246,7 +230,7 @@
   <div id="deleteChatModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeDeleteChat()">&times;</span>
-      <p id="deleteChatText">Are you sure you want to delete the chat with <span id="deletedUserName"></span>?</p>
+      <p id="deleteChatText">Are you sure you want to delete this chat?</p>
       <button onclick="confirmDeleteChatAction()">Yes</button>
       <button onclick="closeDeleteChat()">No</button>
     </div>
@@ -316,8 +300,6 @@
     // Function to open delete chat confirmation modal
     function confirmDeleteChat() {
       var modal = document.getElementById('deleteChatModal');
-      var deletedUserName = document.getElementById('deletedUserName');
-      deletedUserName.textContent = 'Ramy Rashad'; // Example: Replace with dynamic value as needed
       modal.style.display = 'block';
     }
 
@@ -342,7 +324,6 @@
         }
       });
     }
-    
   </script>
 </body>
 </html>
