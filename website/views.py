@@ -48,9 +48,10 @@ views = Blueprint('views', __name__)
 @login_required
 def index():
     users = User.query.all()
-    user_data = {user.id: {'first_name': user.first_name, 'last_name': user.last_name, 'image_filename': user.image_filename} for user in users}
+    user_data = {
+        user.id: {'first_name': user.first_name, 'last_name': user.last_name, 'image_filename': user.image_filename} for
+        user in users}
     return render_template('home.html', user=current_user, user_data=user_data)
-
 
 
 @views.route('/api/user_images', methods=['GET'])
@@ -66,7 +67,8 @@ def get_user_chats(user_id):
         (Chat.sender_id == current_user.id) & (Chat.receiver_id == user_id) |
         (Chat.sender_id == user_id) & (Chat.receiver_id == current_user.id)
     ).all()
-    chat_data = [{'message': chat.message, 'sender_id': chat.sender_id, 'receiver_id': chat.receiver_id} for chat in chats]
+    chat_data = [{'message': chat.message, 'sender_id': chat.sender_id, 'receiver_id': chat.receiver_id} for chat in
+                 chats]
     return jsonify(chat_data)
 
 

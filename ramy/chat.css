@@ -18,9 +18,8 @@ body {
 }
 .chat-container {
     display: flex;
-    flex-direction: horizontal;
-    height: 100vh; 
-    width: 100%; 
+    flex: 1;
+    height: 100vh;
 }
 
 .profile {

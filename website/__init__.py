@@ -10,6 +10,8 @@ DB_NAME = "database.db"
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/uploads')
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
+
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'haha'
@@ -42,3 +44,4 @@ def create_db(app):
         with app.app_context():
             db.create_all()
             print('Created db')
+

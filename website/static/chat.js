@@ -27,20 +27,59 @@ fetch('/api/user_images')
     })
     .catch(error => console.error('Error fetching user images:', error));
 
+
+
 // Function to fetch chats for a specific user from Flask API
 function fetchChats(userId) {
     fetch(`/api/chats/${userId}`)
         .then(response => response.json())
         .then(data => {
-            chats[userId] = data;  // Store messages in chats object
+            if (!chats[userId]) {
+                chats[userId] = [];
+            }
+
+            // Check for new messages
+            const newMessages = data.filter(message => !chats[userId].some(existingMessage => existingMessage.message === message.message));
+
+            // Store messages in chats object
+            chats[userId] = data;
+
             if (userId === currentUserId) {
                 updateChatDisplay();  // Update the display if it's the current user's chat
+
+                // Notify user only if there are new messages
+                if (newMessages.length > 0) {
+                    notifyUser(newMessages[newMessages.length - 1].sender_id);  // Notify with the sender of the latest new message
+                }
             }
         })
         .catch(error => console.error(`Error fetching chats for user ${userId}:`, error));
 }
 
-function updateChatDisplay() {
+document.addEventListener('DOMContentLoaded', () => {
+    const messageInput = document.getElementById('messageInput');
+
+    // Adjust textarea height dynamically on input
+    messageInput.addEventListener('input', () => {
+        adjustTextareaHeight(messageInput);
+    });
+
+    // Allow Enter key to create new lines and adjust height
+    messageInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Prevent default Enter key behavior (submitting form or creating new line)
+            sendMessage(); // Call sendMessage function
+        }
+    });
+
+});
+
+function adjustTextareaHeight(textarea) {
+    textarea.style.height = 'auto'; // Reset height to auto to calculate the correct scrollHeight
+    textarea.style.height = textarea.scrollHeight + 'px'; // Set the height to the scrollHeight
+}
+
+function updateChatDisplay(shouldScroll = false) {
     const messagesContainer = document.getElementById('messages');
     messagesContainer.innerHTML = '';
 
@@ -51,28 +90,39 @@ function updateChatDisplay() {
             appendMessage(chat.message, sender, senderImage);
         });
     }
+
+    // Scroll to the bottom of the messages container if shouldScroll is true
+    if (shouldScroll) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
 }
 
-// Request notification permission
-Notification.requestPermission().then(function(result) {
-    console.log('Notification permission:', result);
-});
 
 function openChat(user, userId) {
     currentUser = user;
     currentUserId = userId;
-    updateChatDisplay();
+    updateChatDisplay(true);  // Pass true to scroll to the bottom
 }
 
 
 function sendMessage() {
     const messageInput = document.getElementById('messageInput');
-    const messageText = messageInput.value.trim();
-
+    let messageText = messageInput.value.trim();
+    messageText = messageText.replace(/\n/g, '<br>');
     if (messageText !== '' && currentUser !== '') {
         const senderImage = userImages[currentUserId] ? `/user_images/${currentUserId}` : '';
 
-        // Send the message to the backend
+        // Insert newline characters (\n) every 50 characters for display
+        const chunkSize = 50;
+        let chunkedMessage = '';
+        for (let i = 0; i < messageText.length; i += chunkSize) {
+            chunkedMessage += messageText.substr(i, chunkSize) + '\n';
+        }
+
+        // Update the message display in real-time
+        //updateMessageDisplay(chunkedMessage);
+        chunkedMessage = chunkedMessage.replace(/\n/g, '<br>');
+        // Send the chunked message to the backend
         fetch(`/api/chats`, {
             method: 'POST',
             headers: {
@@ -80,7 +130,7 @@ function sendMessage() {
             },
             body: JSON.stringify({
                 receiver_id: currentUserId,
-                message: messageText,
+                message: chunkedMessage,
             }),
         })
         .then(response => response.json())
@@ -92,12 +142,14 @@ function sendMessage() {
                     chats[currentUserId] = [];
                 }
                 chats[currentUserId].push({
-                    message: messageText,
+                    message: chunkedMessage,
                     sender_id: currentUser.id,
                     receiver_id: currentUserId,
                     timestamp: new Date()  // Use current date as timestamp
                 });
-                appendMessage(messageText, 'Me', senderImage);  // Ensure message is appended correctly
+                appendMessage(chunkedMessage, 'Me', senderImage);  // Ensure message is appended correctly
+                const messagesContainer = document.getElementById('messages');
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             } else {
                 console.error('Error sending message:', data.error);
             }
@@ -106,37 +158,65 @@ function sendMessage() {
 
         // Clear input after sending
         messageInput.value = '';
+        adjustTextareaHeight(messageInput);
     }
 }
 
+// Function to update message display in real-time
+function updateMessageDisplay(message) {
+    const messagesContainer = document.getElementById('messages');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', 'my-message');
+
+    // Replace \n characters with <br> tags for HTML display
+    messageElement.innerHTML = message.replace(/\n/g, '<br>');
+
+    messagesContainer.appendChild(messageElement);
+}
+
 function appendMessage(message, sender, senderImage) {
+    const messagesContainer = document.getElementById('messages');
+
+    // Create message container
     const messageElement = document.createElement('div');
     messageElement.classList.add('message');
 
+    // Determine message sender
+    const isMe = sender === 'Me';
+
+    // Create message content container
     const messageContent = document.createElement('div');
     messageContent.classList.add('message-content');
+    messageContent.innerHTML = message; // Use innerHTML to interpret <br> tags
 
-    const messageTextElement = document.createElement('p');
-    messageTextElement.textContent = message;
-
-    messageContent.appendChild(messageTextElement);
+    // Append message content to message element
     messageElement.appendChild(messageContent);
 
-    const messagesContainer = document.getElementById('messages');
-    if (sender === 'Me') {
+    // Apply styles based on sender
+    if (isMe) {
         messageElement.classList.add('my-message');
     } else {
         messageElement.classList.add('reply-message');
     }
 
+    // Append message element to messages container
     messagesContainer.appendChild(messageElement);
+
+    // Scroll to the bottom of the messages container
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-function notifyUser(sender) {
+
+function notifyUser(senderId) {
+    const sender = senderId === currentUserId ? currentUser : 'Someone'; // Replace 'Someone' with appropriate logic to fetch sender's name
     if (Notification.permission === 'granted') {
         const notification = new Notification('New Message', {
             body: `You have a new message from ${sender}`,
-            icon: userImages[currentUserId] ? `/user_images/${currentUserId}` : '', // Ensure senderImage is not empty
+            icon: userImages[senderId] ? `/user_images/${senderId}` : '', // Use sender's image URL if available
         });
     }
 }
+
+Notification.requestPermission().then(function(result) {
+    console.log('Notification permission:', result);
+});
