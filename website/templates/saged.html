@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Chat Website</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='saged.css') }}">
+</head>
+<body>
+  <header id="header">
+    <div class="container">
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#about-us">About Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <div class="setting">
+              {% if not user.is_authenticated %}
+                <a href="{{ url_for('auth.signup') }}" class="btn">Sign Up</a>
+                <a href="{{ url_for('auth.login') }}" class="btn">Login</a>
+              {% endif %}
+          </div>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section id="welcome">
+    <div class="container">
+      <h1>Welcome to Our Chat Website</h1>
+      <p>Quickly start your project now and set the stage for success</p>
+      <div class="cta-buttons">
+        <a href="#features" class="btn">Get Started</a>
+        <a href="#video" class="btn">Watch Video</a>
+      </div>
+      <img src="{{ url_for('static', filename='chat.jpg') }}" alt="Chat Image" class="welcome-image">
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <h2>Website Features</h2>
+      <ul>
+        <li>Add friends to chat</li>
+        <li>Block users</li>
+        <li>Fast and secure text chat</li>
+        <li>User-friendly interface</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <h2>About the Website</h2>
+      <p>Our chat website offers a unique chatting experience with your friends. You can easily add new friends and block unwanted users. Enjoy fast and secure text chat with a user-friendly interface. Our platform is designed to be intuitive and easy to use, ensuring that you can focus on your conversations without any distractions. We prioritize your privacy and security, making sure that all your messages are encrypted and safe.</p>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <h2>Our Services</h2>
+      <div class="services-grid">
+        <div class="service-item">
+          <h3>Fast Messaging</h3>
+          <p>Send and receive messages instantly with our optimized chat system.</p>
+        </div>
+        <div class="service-item">
+          <h3>Friend Management</h3>
+          <p>Easily add, remove, and manage your friends within the chat application.</p>
+        </div>
+        <div class="service-item">
+          <h3>User Blocking</h3>
+          <p>Block unwanted users to maintain a safe and enjoyable chat environment.</p>
+        </div>
+        <div class="service-item">
+          <h3>Secure Chat</h3>
+          <p>All messages are encrypted to ensure your privacy and security.</p>
+        </div>
+        <div class="service-item">
+          <h3>Customizable Profiles</h3>
+          <p>Create and customize your profile to reflect your personality.</p>
+        </div>
+        <div class="service-item">
+          <h3>Group Chats</h3>
+          <p>Create and join group chats to stay connected with multiple friends at once.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="container">
+      <h2>Pricing</h2>
+      <p>One of the best features of our chat website is that it is completely free! Enjoy all the functionalities without any cost.</p>
+    </div>
+  </section>
+
+  <section id="about-us">
+    <div class="container">
+      <h2>About Us</h2>
+      <div class="about-us-grid">
+        <div class="about-us-item">
+          <img src="{{ url_for('static', filename='saged.jpg') }}" alt="Saged Ryan">
+          <h3>Saged Ryan</h3>
+          <p>We are third-year students at the Faculty of Engineering, Port Said University, Electonics and Communications Department.</p>
+        </div>
+        <div class="about-us-item">
+          <img src="{{ url_for('static', filename='ramy.jpg') }}" alt="Rami Rashad">
+          <h3>Rami Rashad</h3>
+          <p>We are third-year students at the Faculty of Engineering, Port Said University,Electonics and Communications Department.</p>
+        </div>
+        <div class="about-us-item">
+          <img src="{{ url_for('static', filename='gendy.jpg') }}" alt="Ahmed Elgendy">
+          <h3>Ahmed El Gendy</h3>
+          <p>We are third-year students at the Faculty of Engineering, Port Said University,Electonics and Communications Department.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <h2>Contact Us</h2>
+      <p>We are based in Port Said, Egypt, and we run our chat website on a dedicated server. To access our chat services, you need to log in with your email, password, first name, and last name.</p>
+      <p>Email and Phone Contacts:</p>
+      <ul>
+        <li>Email: ramy41599@gmail.com, Phone: 01280348153</li>
+        <li>Email: sagedryan775@gmail.com, Phone: 01287703415</li>
+        <li>Email: elgendyahmed753@gmail.com, Phone: 01212252985</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2024 Our Chat Website. All rights reserved.</p>
+      <p>Designed by Saged Ryan, Rami Rashad, Ahmed El Gendy</p>
+    </div>
+  </footer>
+  <script src="{{ url_for('static', filename='saged.js') }}"></script>
+</body>
+</html>
+{% endblock %}
+

@@ -220,3 +220,7 @@ function notifyUser(senderId) {
 Notification.requestPermission().then(function(result) {
     console.log('Notification permission:', result);
 });
+
+
+
+

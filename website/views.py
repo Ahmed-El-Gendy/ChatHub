@@ -44,7 +44,7 @@ from . import db
 views = Blueprint('views', __name__)
 
 
-@views.route('/')
+@views.route('/home')
 @login_required
 def index():
     users = User.query.all()
@@ -52,6 +52,15 @@ def index():
         user.id: {'first_name': user.first_name, 'last_name': user.last_name, 'image_filename': user.image_filename} for
         user in users}
     return render_template('home.html', user=current_user, user_data=user_data)
+
+
+@views.route('/')
+def home():
+    users = User.query.all()
+    user_data = {
+        user.id: {'first_name': user.first_name, 'last_name': user.last_name, 'image_filename': user.image_filename} for
+        user in users}
+    return render_template('saged.html', user=current_user, user_data=user_data)
 
 
 @views.route('/api/user_images', methods=['GET'])
