@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Friends</title>
+    <link rel="stylesheet" href="friends.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Friends</h1>
+        <form action="/add_friend" method="post">
+            <label for="friend_email">Add Friend by Email:</label>
+            <input type="email" id="friend_email" name="friend_email" required>
+            <button type="submit">Add Friend</button>
+        </form>
+        <form action="/remove_friend" method="post">
+            <label for="remove_friend_email">Remove Friend by Email:</label>
+            <input type="email" id="remove_friend_email" name="remove_friend_email" required>
+            <button type="submit">Remove Friend</button>
+        </form>
+        <h2>Friend Requests</h2>
+        <ul id="friend_requests">
+            <!-- Friend requests will be listed here -->
+        </ul>
+    </div>
+    <script>
+        // Example JavaScript to dynamically populate friend requests
+        const friendRequests = ["john@example.com", "jane@example.com", "ramy41599#gmail.com"];
+        const friendRequestsList = document.getElementById("friend_requests");
+
+        friendRequests.forEach(request => {
+            const listItem = document.createElement("li");
+            listItem.textContent = request;
+            friendRequestsList.appendChild(listItem);
+        });
+    </script>
+</body>
+</html>
