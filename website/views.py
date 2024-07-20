@@ -35,13 +35,20 @@ def get_data():
 def go_to_home():
     return redirect(url_for('views.get_json'))"""
 
-from flask import Blueprint, render_template, jsonify, send_file, request
+from flask import Blueprint, render_template, jsonify, send_file, request, redirect, flash, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User, Chat
 import io
 from . import db
+from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
 
 views = Blueprint('views', __name__)
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @views.route('/home')
@@ -54,6 +61,16 @@ def index():
     return render_template('home.html', user=current_user, user_data=user_data)
 
 
+@views.route('/friends')
+@login_required
+def friends():
+    users = User.query.all()
+    user_data = {
+        user.id: {'first_name': user.first_name, 'last_name': user.last_name, 'image_filename': user.image_filename} for
+        user in users}
+    return render_template('friends.html', user=current_user, user_data=user_data)
+
+
 @views.route('/')
 def home():
     users = User.query.all()
@@ -61,6 +78,52 @@ def home():
         user.id: {'first_name': user.first_name, 'last_name': user.last_name, 'image_filename': user.image_filename} for
         user in users}
     return render_template('saged.html', user=current_user, user_data=user_data)
+
+
+@views.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if request.method == 'POST':
+        print('Form Data:', request.form)  # Print form data
+        print('Files:', request.files)  # Print file data
+        if 'update_name' in request.form:
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            if first_name and last_name:
+                current_user.first_name = first_name
+                current_user.last_name = last_name
+                db.session.commit()
+                flash('Name updated successfully!', 'success')
+            else:
+                flash('Please provide both first name and last name', 'error')
+        elif 'update_password' in request.form:
+            password = request.form.get('password')
+            if password:
+                current_user.password = generate_password_hash(password)
+                db.session.commit()
+                flash('Password updated successfully!', 'success')
+            else:
+                flash('Please provide a new password.', 'error')
+        elif 'update_photo' in request.form:
+            print('Photo Update Requested')
+            photo = request.files.get('photo')
+            if photo and photo.filename:
+                if allowed_file(photo.filename):
+                    image_filename = secure_filename(photo.filename)
+                    image_data = photo.read()
+                    current_user.image_data = image_data
+                    current_user.image_filename = image_filename
+                    db.session.commit()
+                    flash('Profile photo updated successfully!', 'success')
+                else:
+                    flash('Invalid file type. Please upload a jpg, jpeg, or png image.', 'error')
+            else:
+                flash('No file uploaded.', 'error')
+    users = User.query.all()
+    user_data = {
+        user.id: {'first_name': user.first_name, 'last_name': user.last_name, 'image_filename': user.image_filename} for
+        user in users}
+    return render_template('setting.html', user=current_user, user_data=user_data)
 
 
 @views.route('/api/user_images', methods=['GET'])

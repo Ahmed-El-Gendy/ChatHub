@@ -1,22 +1,23 @@
 /* Add your CSS styles here */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background: url('0.jpg') no-repeat center center fixed;
-    background-size: cover;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: url('0.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+
 .setting
-  {
+{
     display: inline-block;
     position: absolute;
     right: 0%;
     top: 50%;
     transform: translateY(-50%);
-  }
-
- .btn {
+}
+.btn {
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
@@ -24,13 +25,10 @@ body {
     text-align: center;
     text-decoration: none;
     border-radius: 5px;
-  }
-  .container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-  }
-  
+    border-color: #0a58ca;
+    background-color: #0a58ca;
+}
+
   header {
     position: relative;
     background: rgba(51, 51, 51, 0.8); /* Semi-transparent background */
@@ -39,7 +37,13 @@ body {
     min-height: 70px;
     border-bottom: #77aaff 3px solid;
   }
-  
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
   header a {
     color: #fff;
     text-decoration: none;

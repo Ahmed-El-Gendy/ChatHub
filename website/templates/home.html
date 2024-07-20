@@ -11,59 +11,33 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="chat-container">
-            <div class="profile">
-                <h2><p>{{ user.first_name }} {{ user.last_name }}</p></h2>
-                <img src="{{ url_for('views.user_image', user_id=user.id) }}" alt="{{ user.first_name }} {{ user.last_name }} Profile" class="profile-img">
-                <div class="add-remove-friend">
-                    <form action="{{ url_for('auth.add_friend_by_email') }}" method="post">
-                        <label for="friend_email">Friend's Email:</label>
-                        <input type="email" id="friend_email" name="friend_email" required>
-                        <button type="submit">Add Friend</button>
-                    </form>
-                    <form action="{{ url_for('auth.remove_friend_by_email') }}" method="post">
-                        <label for="remove_friend_email">Friend's Email:</label>
-                        <input type="email" id="remove_friend_email" name="remove_friend_email" required>
-                        <button type="submit">Remove Friend</button>
-                    </form>
-                    <h5>Friend Requests</h5>
-                    <ul id="friend-requests">
-                        {% for request in user.friend_requests_received %}
-                            <li>
-                                <img src="{{ url_for('views.user_image', user_id=request.sender.id) }}" alt="{{ request.sender.first_name }} {{ request.sender.last_name }} Profile" class="user-img">
-                                {{ request.sender.first_name }} {{ request.sender.last_name }}
-                                <form action="{{ url_for('auth.accept_friend', user_id=request.sender.id) }}" method="post">
-                                    <button type="submit">Accept</button>
-                                </form>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+    <div class="chat-container">
+        <div class="profile">
+            <h2><p>{{ user.first_name }} {{ user.last_name }}</p></h2>
+            <img src="{{ url_for('views.user_image', user_id=user.id) }}" alt="{{ user.first_name }} {{ user.last_name }} Profile" class="profile-img">
+        </div>
+        <div class="users-list">
+            <h3>Friends</h3>
+            <ul id="friends-list">
+                {% for friend in user.friends %}
+                    <li onclick="openChat('{{ friend.id }}', {{ friend.id }})">
+                        <img src="{{ url_for('views.user_image', user_id=friend.id) }}" alt="{{ friend.first_name }} {{ friend.last_name }} Profile" class="user-img">
+                        {{ friend.first_name }} {{ friend.last_name }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="chat-window">
+            <div class="messages" id="messages">
+                <h3>Select a user to start chatting</h3>
             </div>
-            <div class="users-list">
-                <h3>Friends</h3>
-                <ul id="friends-list">
-                    {% for friend in user.friends %}
-                        <li onclick="openChat('{{ friend.id }}', {{ friend.id }})">
-                            <img src="{{ url_for('views.user_image', user_id=friend.id) }}" alt="{{ friend.first_name }} {{ friend.last_name }} Profile" class="user-img">
-                            {{ friend.first_name }} {{ friend.last_name }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="chat-window">
-                <div class="messages" id="messages">
-                    <h3>Select a user to start chatting</h3>
-                </div>
-                <div class="input-area">
-                    <label for="messageInput"></label><textarea id="messageInput" placeholder="Type a message"></textarea>
-                    <button onclick="sendMessage()">Send</button>
-                </div>
+            <div class="input-area">
+                <label for="messageInput"></label><textarea id="messageInput" placeholder="Type a message"></textarea>
+                <button onclick="sendMessage()">Send</button>
             </div>
         </div>
-        <script src="{{ url_for('static', filename='chat.js') }}"></script>
     </div>
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
 </body>
 </html>
 {% endblock %}

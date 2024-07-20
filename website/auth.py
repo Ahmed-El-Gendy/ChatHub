@@ -152,21 +152,21 @@ def add_friend_by_email():
     friend_email = request.form.get('friend_email')
     if not friend_email:
         flash('Please provide an email address.', 'error')
-        return redirect(url_for('views.index'))
+        return redirect(url_for('views.friends'))
 
     friend = User.query.filter_by(email=friend_email).first()
     if friend is None:
         flash('User not found.', 'error')
-        return redirect(url_for('views.index'))
+        return redirect(url_for('views.friends'))
 
     if friend == current_user:
         flash('You cannot add yourself as a friend.', 'error')
-        return redirect(url_for('views.index'))
+        return redirect(url_for('views.friends'))
 
     current_user.send_friend_request(friend)
     db.session.commit()
     flash(f'Friend request sent to {friend.first_name} {friend.last_name}.', 'success')
-    return redirect(url_for('views.index'))
+    return redirect(url_for('views.friends'))
 
 
 @auth.route('/remove_friend_by_email', methods=['POST'])
@@ -175,21 +175,21 @@ def remove_friend_by_email():
     remove_friend_email = request.form.get('remove_friend_email')
     if not remove_friend_email:
         flash('Please provide an email address.', 'error')
-        return redirect(url_for('views.index'))
+        return redirect(url_for('views.friends'))
 
     friend = User.query.filter_by(email=remove_friend_email).first()
     if friend is None:
         flash('User not found.', 'error')
-        return redirect(url_for('views.index'))
+        return redirect(url_for('views.friends'))
 
     if not current_user.is_friend(friend):
         flash(f'{friend.first_name} {friend.last_name} is not your friend.', 'error')
-        return redirect(url_for('views.index'))
+        return redirect(url_for('views.friends'))
 
     current_user.remove_friend(friend)
     db.session.commit()
     flash(f'You are no longer friends with {friend.first_name} {friend.last_name}.', 'success')
-    return redirect(url_for('views.index'))
+    return redirect(url_for('views.friends'))
 
 
 @auth.route('/accept_friend/<int:user_id>', methods=['POST'])
@@ -199,5 +199,5 @@ def accept_friend(user_id):
     current_user.accept_friend_request(sender)
     db.session.commit()
     flash(f'You are now friends with {sender.first_name} {sender.last_name}.', 'success')
-    return redirect(url_for('views.index'))
+    return redirect(url_for('views.friends'))
 

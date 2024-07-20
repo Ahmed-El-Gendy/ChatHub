@@ -1,0 +1,24 @@
+<div class="add-remove-friend">
+                <form action="{{ url_for('auth.add_friend_by_email') }}" method="post">
+                    <label for="friend_email">Friend's Email:</label>
+                    <input type="email" id="friend_email" name="friend_email" required>
+                    <button type="submit">Add Friend</button>
+                </form>
+                <form action="{{ url_for('auth.remove_friend_by_email') }}" method="post">
+                    <label for="remove_friend_email">Friend's Email:</label>
+                    <input type="email" id="remove_friend_email" name="remove_friend_email" required>
+                    <button type="submit">Remove Friend</button>
+                </form>
+                <h5>Friend Requests</h5>
+                <ul id="friend-requests">
+                    {% for request in user.friend_requests_received %}
+                        <li>
+                            <img src="{{ url_for('views.user_image', user_id=request.sender.id) }}" alt="{{ request.sender.first_name }} {{ request.sender.last_name }} Profile" class="user-img">
+                            {{ request.sender.first_name }} {{ request.sender.last_name }}
+                            <form action="{{ url_for('auth.accept_friend', user_id=request.sender.id) }}" method="post">
+                                <button type="submit">Accept</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>

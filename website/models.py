@@ -2,6 +2,7 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 
 friends = db.Table('friends',
                    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
@@ -37,6 +38,7 @@ class User(UserMixin, db.Model):
     def remove_friend(self, user):
         if self.is_friend(user):
             self.friends.remove(user)
+            user.friends.remove(self)
 
     def is_friend(self, user):
         return self.friends.filter(friends.c.friend_id == user.id).count() > 0
@@ -54,10 +56,22 @@ class User(UserMixin, db.Model):
     # Existing methods...
 
     def send_friend_request(self, recipient):
-        if not self.is_friend(recipient) and not self.has_pending_request(recipient):
+        # Check if already friends or has a pending request
+        if not self.is_friend(recipient) and not self.has_pending_request(recipient) and not recipient.has_pending_request(self):
+            # Create and add the new friend request
             friend_request = FriendRequest(sender_id=self.id, receiver_id=recipient.id)
             db.session.add(friend_request)
             db.session.commit()
+            return "Friend request sent successfully."
+        elif self.is_friend(recipient):
+            return "You are already friends."
+        elif self.has_pending_request(recipient):
+            return "You have already sent a friend request to this user."
+        elif recipient.has_pending_request(self):
+            return "This user has already sent you a friend request."
+
+    def has_pending_request(self, user):
+        return self.friend_requests_received.filter_by(sender_id=user.id).count() > 0
 
     def accept_friend_request(self, sender):
         if self.has_pending_request(sender):
@@ -67,8 +81,20 @@ class User(UserMixin, db.Model):
             db.session.delete(friend_request)
             db.session.commit()
 
-    def has_pending_request(self, user):
-        return self.friend_requests_received.filter_by(sender_id=user.id).count() > 0
+    def update_profile(self, first_name=None, last_name=None, password=None, image_data=None, image_filename=None):
+        if first_name:
+            self.first_name = first_name
+        if last_name:
+            self.last_name = last_name
+        if password:
+            self.password = generate_password_hash(password)
+        if image_data:
+            self.image_data = image_data
+        if image_filename:
+            self.image_filename = image_filename
+        db.session.commit()
+
+
 
 class Message(db.Model):
     __tablename__ = 'messages'
@@ -96,3 +122,5 @@ class FriendRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    status = db.Column(db.String(20), default='pending')
+
