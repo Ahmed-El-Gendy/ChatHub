@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='friends.css') }}">
 </head>
 <body>
-    <div class="container">
         <h1>Manage Friends</h1>
         <form action="{{ url_for('auth.add_friend_by_email') }}" method="post">
             <label for="friend_email">Add Friend by Email:</label>
@@ -24,7 +23,6 @@
             <button type="submit">Remove Friend</button>
         </form>
         <h2>Friend Requests</h2>
-    </div>
     <ul id="friend-requests">
         {% for request in user.friend_requests_received %}
             <li>

@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='setting.css') }}">
 </head>
 <body>
-    <div class="container">
         <h1>Edit Profile</h1>
         <form action="{{ url_for('views.settings') }}" method="post">
             <label for="first_name">First Name:</label>
@@ -30,7 +29,6 @@
             <input type="file" id="photo" name="photo" accept="image/*">
             <button type="submit" name="update_photo">Update Photo</button>
         </form>
-    </div>
 </body>
 </html>
 {% endblock %}
