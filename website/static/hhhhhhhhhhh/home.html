@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome CDN for icons -->
+</head>
+<body>
+    <div class="chat-container">
+        <div class="profile">
+            <h2><p>{{ user.first_name }} {{ user.last_name }}</p></h2>
+            <img src="{{ url_for('views.user_image', user_id=user.id) }}" alt="{{ user.first_name }} {{ user.last_name }} Profile" class="profile-img">
+            <div class="settings">
+                <a href="#" onclick="openSettings()">View Profile</a>
+                <a href="#" onclick="openBlockModal()">Block</a>
+                <a href="#" onclick="openDeleteChatModal()">Delete Chat</a>
+            </div>
+        </div>
+        <div class="users-list">
+            <h3>Contacts</h3>
+            <ul>
+                {% for user_id, data in user_data.items() %}
+                    {% if user_id != user.id %}
+                        <li onclick="openChat('{{ user_id }}', {{ user_id }})">
+                            <img src="{{ url_for('views.user_image', user_id=user_id) }}" alt="{{ data.first_name }} {{ data.last_name }} Profile" class="user-img">
+                            {{ data.first_name }} {{ data.last_name }}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="chat-window">
+            <div class="messages" id="messages">
+                <h3>Select a user to start chatting</h3>
+            </div>
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="Type a message">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSettings()">&times;</span>
+            <h2>Settings</h2>
+            <ul>
+                <li><a href="#">Change Email</a></li>
+                <li><a href="#">Change Password</a></li>
+                <li><a href="#">Change Username</a></li>
+                <li><a href="#">Change Photo</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Block Modal -->
+    <div class="modal" id="blockModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBlockModal()">&times;</span>
+            <h2>Block Friends</h2>
+            <div class="friend-list">
+                <ul>
+                    {% for user_id, data in user_data.items() %}
+                        {% if user_id != user.id %}
+                            <li><a href="#" onclick="confirmBlock('{{ data.first_name }} {{ data.last_name }}', '{{ user_id }}')">Block {{ data.first_name }} {{ data.last_name }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Chat Modal -->
+    <div class="modal" id="deleteChatModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDeleteChatModal()">&times;</span>
+            <h2>Delete Chat</h2>
+            <div class="friend-list">
+                <ul>
+                    {% for user_id, data in user_data.items() %}
+                        {% if user_id != user.id %}
+                            <li><a href="#" onclick="confirmDeleteChat('{{ data.first_name }} {{ data.last_name }}', '{{ user_id }}')">Delete Chat with {{ data.first_name }} {{ data.last_name }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+    <script>
+        function openSettings() {
+            document.getElementById('settingsModal').style.display = 'block';
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        function openBlockModal() {
+            document.getElementById('blockModal').style.display = 'block';
+        }
+
+        function closeBlockModal() {
+            document.getElementById('blockModal').style.display = 'none';
+        }
+
+        function confirmBlock(friendName, friendId) {
+            if (confirm(`Do you really want to block "${friendName}"?`)) {
+                // Logic to block the friend goes here
+                alert(`"${friendName}" has been blocked.`);
+            } else {
+                // Cancel block operation
+            }
+            closeBlockModal();
+        }
+
+        function openDeleteChatModal() {
+            document.getElementById('deleteChatModal').style.display = 'block';
+        }
+
+        function closeDeleteChatModal() {
+            document.getElementById('deleteChatModal').style.display = 'none';
+        }
+
+        function confirmDeleteChat(friendName, friendId) {
+            if (confirm(`Do you really want to delete the chat with "${friendName}"?`)) {
+                // Logic to delete the chat goes here
+                alert(`Chat with "${friendName}" has been deleted.`);
+            } else {
+                // Cancel delete chat operation
+            }
+            closeDeleteChatModal();
+        }
+
+        function openChat(userId, userName) {
+            // Logic to open chat with the selected user
+            alert(`Opening chat with user ID ${userId}, Name: ${userName}`);
+        }
+
+        function sendMessage() {
+            // Logic to send a message
+            let message = document.getElementById('messageInput').value;
+            if (message.trim() !== '') {
+                // Logic to send the message goes here
+                alert(`Sending message: ${message}`);
+                document.getElementById('messageInput').value = '';
+            } else {
+                alert('Please enter a message.');
+            }
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,232 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat container styles */
+.chat-container {
+    display: flex;
+    flex: 1;
+    height: 100vh;
+}
+
+/* Profile styles */
+.profile {
+    position: relative;
+    background-color: #3b5998;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    flex: 0 0 200px;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-top: 10px;
+}
+
+.settings {
+    margin-top: 20px; /* تباعد بين الصورة الشخصية والأزرار */
+}
+
+.settings a {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px; /* تباعد بين الأزرار */
+    background-color: #3b5998;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.settings a:hover {
+    background-color: #2952a3; /* لون خلفية مختلف عند التحويم */
+}
+
+/* User list styles */
+.users-list {
+    background-color: #8b9dc3;
+    padding: 20px;
+    width: 200px;
+    flex: 0 0 200px;
+    overflow: auto;
+}
+
+.users-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.users-list li {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.users-list li:hover {
+    background-color: #dfe3ee;
+}
+
+/* Chat window styles */
+.chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    color: #000000;
+}
+
+.messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: scroll;
+    border-bottom: 1px solid #ddd;
+}
+
+.message {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.message .message-content {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+}
+
+.message .message-content .user-img {
+    margin-right: 10px;
+}
+
+.message .message-content p {
+    margin: 0;
+}
+
+.message.my-message .message-content {
+    background-color: #dcf8c6; /* Light green */
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.message.reply-message .message-content {
+    background-color: #f0f0f0; /* Light grey */
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Input area styles */
+.input-area {
+    display: flex;
+    padding: 10px;
+    background-color: #000;
+}
+
+.input-area input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #00ff00;
+    background-color: #000;
+}
+
+.input-area input::placeholder {
+    color: #00ff00;
+}
+
+.input-area button {
+    padding: 10px;
+    margin-left: 10px;
+    border: none;
+    background-color: #3b5998;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with transparency */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    border-radius: 5px;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #3b5998; /* Facebook blue */
+}
+
+.modal-content ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.modal-content ul li {
+    margin-bottom: 10px;
+}
+
+.modal-content ul li a {
+    display: block;
+    padding: 10px;
+    background-color: #3b5998;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.modal-content ul li a:hover {
+    background-color: #2952a3; /* Darker shade of Facebook blue */
+}
+
+.modal-content .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-content .close:hover,
+.modal-content .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

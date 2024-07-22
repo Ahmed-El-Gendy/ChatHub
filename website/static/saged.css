@@ -1,0 +1,224 @@
+/* Add your CSS styles here */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: url('0.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+
+.setting
+{
+    display: inline-block;
+    position: absolute;
+    right: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    border-color: #0a58ca;
+    background-color: #0a58ca;
+}
+
+  header {
+    position: relative;
+    background: rgba(51, 51, 51, 0.8); /* Semi-transparent background */
+    color: #fff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #77aaff 3px solid;
+  }
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+  header a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+  }
+  
+  header ul {
+    padding: 0;
+    list-style: none;
+  }
+  
+  header li {
+    display: inline;
+    padding: 0 20px 0 20px;
+  }
+  
+  #welcome {
+    text-align: center;
+    padding: 100px 0;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  }
+  
+  #welcome .cta-buttons {
+    margin-top: 20px;
+  }
+  
+  #welcome .btn {
+    display: inline-block;
+    color: #fff;
+    background: #77aaff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 0 10px;
+  }
+  
+  #welcome .btn:hover {
+    background: #0056b3;
+  }
+  
+  .welcome-image {
+    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  section {
+    padding: 20px 0;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  }
+  
+  .services-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .service-item {
+    flex: 1 1 calc(33.333% - 20px);
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .about-us-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .about-us-item {
+    flex: 1 1 calc(20.333% - 20px);
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .about-us-item img {
+    max-width: 30%; /* Reduce image size */
+    height: auto;
+    border-radius: 20%;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  form label {
+    font-weight: bold;
+  }
+  
+  form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  form button {
+    padding: 10px;
+    background: #77aaff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  form button:hover {
+    background: #0056b3;
+  }
+  
+  footer {
+    background: rgba(51, 51, 51, 0.8); /* Semi-transparent background */
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+  }
+  #contact {
+
+    padding: 50px 0;
+  }
+  
+  #contact .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  #contact h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  #contact p {
+    font-size: 1.1em;
+    color: #666;
+    line-height: 1.6;
+    text-align: center;
+  }
+  
+  #contact ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  #contact ul li {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  #contact ul li:before {
+    content: "\2709"; /* Unicode for phone icon */
+    color: #666;
+    margin-right: 10px;
+  }
+  
+  #contact ul li:first-child:before {
+    content: "\2709"; /* Unicode for envelope icon */
+  }
+  
