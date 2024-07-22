@@ -3,6 +3,18 @@ let currentUserId = '';
 let userImages = {};  // Initialize as empty object
 let chats = {};       // Initialize as empty object
 
+// Request notification permission on page load
+Notification.requestPermission().then(function(result) {
+    console.log('Notification permission:', result);
+    if (result === 'granted') {
+        console.log('Notification permission granted.');
+    } else {
+        console.log('Notification permission denied.');
+    }
+});
+
+
+
 // Fetch user images from Flask API
 fetch('/api/user_images')
     .then(response => response.json())
@@ -31,9 +43,11 @@ fetch('/api/user_images')
 
 // Function to fetch chats for a specific user from Flask API
 function fetchChats(userId) {
+    console.log(`Fetching chats for userId: ${userId}`);
     fetch(`/api/chats/${userId}`)
         .then(response => response.json())
         .then(data => {
+            console.log(`Chats fetched for userId: ${userId}`, data);
             if (!chats[userId]) {
                 chats[userId] = [];
             }
@@ -44,17 +58,22 @@ function fetchChats(userId) {
             // Store messages in chats object
             chats[userId] = data;
 
-            if (userId === currentUserId) {
-                updateChatDisplay();  // Update the display if it's the current user's chat
+            // Notify user only if there are new messages
+            if (newMessages.length > 0) {
+                console.log(`Notifying user about new message from senderId: ${newMessages[newMessages.length - 1].sender_id}`);
+                notifyUser(newMessages[newMessages.length - 1].sender_id);  // Notify with the sender of the latest new message
+            }
 
-                // Notify user only if there are new messages
-                if (newMessages.length > 0) {
-                    notifyUser(newMessages[newMessages.length - 1].sender_id);  // Notify with the sender of the latest new message
-                }
+            // Update the chat display if it's the current user's chat
+            if (userId === currentUserId) {
+                updateChatDisplay(false);  // Update the display if it's the current user's chat
             }
         })
         .catch(error => console.error(`Error fetching chats for user ${userId}:`, error));
 }
+
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const messageInput = document.getElementById('messageInput');
@@ -149,7 +168,7 @@ function sendMessage() {
                 });
                 appendMessage(chunkedMessage, 'Me', senderImage);  // Ensure message is appended correctly
                 const messagesContainer = document.getElementById('messages');
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                //messagesContainer.scrollTop = messagesContainer.scrollHeight;
             } else {
                 console.error('Error sending message:', data.error);
             }
@@ -203,23 +222,39 @@ function appendMessage(message, sender, senderImage) {
     messagesContainer.appendChild(messageElement);
 
     // Scroll to the bottom of the messages container
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    //messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
 
 function notifyUser(senderId) {
     const sender = senderId === currentUserId ? currentUser : 'Someone'; // Replace 'Someone' with appropriate logic to fetch sender's name
     if (Notification.permission === 'granted') {
-        const notification = new Notification('New Message', {
-            body: `You have a new message from ${sender}`,
-            icon: userImages[senderId] ? `/user_images/${senderId}` : '', // Use sender's image URL if available
-        });
+        console.log(`Creating notification for senderId: ${senderId}, sender: ${sender}`);
+        try {
+            const notification = new Notification('New Message', {
+                body: `You have a new message from ${sender}`,
+                icon: userImages[senderId] ? `/user_images/${senderId}` : '', // Use sender's image URL if available
+            });
+
+            // Add event listener to notification for additional debugging
+            notification.onclick = () => {
+                console.log('Notification clicked');
+            };
+
+            // Add an error listener to catch issues with the notification
+            notification.onerror = (error) => {
+                console.error('Notification error:', error);
+            };
+        } catch (error) {
+            console.error('Error creating notification:', error);
+        }
+    } else {
+        console.log('Notification permission not granted or denied');
     }
 }
 
-Notification.requestPermission().then(function(result) {
-    console.log('Notification permission:', result);
-});
+
+
 
 
 
