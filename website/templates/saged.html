@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
 <html lang="en">
@@ -52,7 +52,7 @@
       <h2>Website Features</h2>
       <ul>
         <li>Add friends to chat</li>
-        <li>Block users</li>
+        <li>Remove friends</li>
         <li>Fast and secure text chat</li>
         <li>User-friendly interface</li>
       </ul>
@@ -79,20 +79,12 @@
           <p>Easily add, remove, and manage your friends within the chat application.</p>
         </div>
         <div class="service-item">
-          <h3>User Blocking</h3>
-          <p>Block unwanted users to maintain a safe and enjoyable chat environment.</p>
-        </div>
-        <div class="service-item">
           <h3>Secure Chat</h3>
           <p>All messages are encrypted to ensure your privacy and security.</p>
         </div>
         <div class="service-item">
           <h3>Customizable Profiles</h3>
           <p>Create and customize your profile to reflect your personality.</p>
-        </div>
-        <div class="service-item">
-          <h3>Group Chats</h3>
-          <p>Create and join group chats to stay connected with multiple friends at once.</p>
         </div>
       </div>
     </div>
@@ -117,12 +109,12 @@
         <div class="about-us-item">
           <img src="{{ url_for('static', filename='ramy.jpg') }}" alt="Rami Rashad">
           <h3>Rami Rashad</h3>
-          <p>We are third-year students at the Faculty of Engineering, Port Said University,Electonics and Communications Department.</p>
+          <p>I'm Ramy Rashad, an Egyptian studying Communication and Electronics Engineering at Port Said University and Software Developing at ALX. Connect with me on <a href="https://www.linkedin.com/in/ramy-mohamed-952012281" target="_blank">LinkedIn</a>.</p>
         </div>
         <div class="about-us-item">
           <img src="{{ url_for('static', filename='gendy.jpg') }}" alt="Ahmed Elgendy">
           <h3>Ahmed El Gendy</h3>
-          <p>We are third-year students at the Faculty of Engineering, Port Said University,Electonics and Communications Department.</p>
+          <p>My name is Ahmed El Gendy, and I am a communication and electronics student with a passion for coding and video games. I aspire to work as a software engineer. Connect with me on <a href="https://www.linkedin.com/in/ahmed-elgendy56/" target="_blank">LinkedIn</a>.</p>
         </div>
       </div>
     </div>
